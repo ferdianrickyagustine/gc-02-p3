@@ -1,9 +1,14 @@
 "use client";
 
 import { ProductModel } from "@/db/models/product";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const FeaturedCard = ({ products }: { products: string }) => {
   const parsedProducts = JSON.parse(products) as ProductModel[];
+  const router = useRouter();
+  const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
   
   const formatRupiah = (price: number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -14,6 +19,39 @@ const FeaturedCard = ({ products }: { products: string }) => {
     }).format(price);
   };
 
+  const handleAddToWishlist = async (productId: string) => {
+    try {
+      setLoading(prev => ({ ...prev, [productId]: true }));
+      
+      const response = await fetch('/api/wishlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push('/login');
+          return;
+        }
+        throw new Error(data.error || 'Failed to add to wishlist');
+      }
+
+      // Show success feedback (you might want to add a toast notification here)
+      alert('Added to wishlist successfully!');
+      
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+      alert('Failed to add to wishlist. Please try again.');
+    } finally {
+      setLoading(prev => ({ ...prev, [productId]: false }));
+    }
+  };
+
   return (
     <>
       {parsedProducts.map((product) => (
@@ -21,36 +59,39 @@ const FeaturedCard = ({ products }: { products: string }) => {
           key={product._id.toString()}
           className="bg-white rounded-sm shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col"
         >
-          {/* Image Container */}
-          <div className="relative pt-[100%] overflow-hidden">
-            <img
-              src={product.thumbnail || 'https://placehold.co/300x300/png?text=No+Image'}
-              alt={product.name}
-              className="absolute top-0 left-0 w-full h-full object-cover"
-            />
-          </div>
+          <Link href={`/products/${product.slug}`}>
+            <div className="relative pt-[100%] overflow-hidden">
+              <img
+                src={product.thumbnail || 'https://placehold.co/300x300/png?text=No+Image'}
+                alt={product.name}
+                className="absolute top-0 left-0 w-full h-full object-cover"
+              />
+            </div>
+          </Link>
 
-          {/* Product Info */}
           <div className="p-3 flex flex-col flex-grow">
-            <h3 className="text-sm text-gray-600 mb-2 line-clamp-2 min-h-[2.5rem]">
-              {product.name}
-            </h3>
+            <Link href={`/products/${product.slug}`}>
+              <h3 className="text-sm text-gray-600 mb-2 line-clamp-2 min-h-[2.5rem] hover:text-[#f57224]">
+                {product.name}
+              </h3>
+            </Link>
 
             <div className="mt-auto flex justify-between items-center">
               <div className="text-[#f57224] text-lg font-medium">
                 {formatRupiah(product.price)}
               </div>
               
-              {/* Wishlist Button */}
               <button 
-                className="text-gray-400 hover:text-[#f57224] transition-colors duration-200"
+                className={`text-gray-400 hover:text-[#f57224] transition-colors duration-200 ${loading[product._id.toString()] ? 'opacity-50 cursor-not-allowed' : ''}`}
+                onClick={() => handleAddToWishlist(product._id.toString())}
+                disabled={loading[product._id.toString()]}
                 aria-label="Add to wishlist"
               >
                 <svg
                   width="20"
                   height="20"
                   viewBox="0 0 1024 1024"
-                  className="icon"
+                  className={`icon ${loading[product._id.toString()] ? 'animate-pulse' : ''}`}
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -64,7 +105,6 @@ const FeaturedCard = ({ products }: { products: string }) => {
         </div>
       ))}
     </>
-
   );
 };
 

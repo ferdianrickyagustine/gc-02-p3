@@ -26,13 +26,13 @@ export const doLogin = async (formData: FormData) => {
     const errMessage = parsedData.error.issues[0].message;
     const errFinalMessage = `${errPath} - ${errMessage}`;
 
-    return redirect(`http://localhost:3000/login?error=${errFinalMessage}`);
+    return redirect(`http://localhost:3001/login?error=${errFinalMessage}`);
   }
 
   const user = await findUserByEmail(parsedData.data.email);
 
   if (!user || !compare(parsedData.data.password, user.password)) {
-    return redirect("http://localhost:3000/login?error=Invalid%20credentials");
+    return redirect("http://localhost:3001/login?error=Invalid%20credentials");
   }
 
   const payload = {
@@ -50,5 +50,5 @@ export const doLogin = async (formData: FormData) => {
     sameSite: "strict",
   });
 
-  return redirect("http://localhost:3000/");
+  return redirect("http://localhost:3001/");
 };

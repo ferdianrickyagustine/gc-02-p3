@@ -28,11 +28,26 @@ export const addToWishlist = async (userId: ObjectId, productId: ObjectId) => {
   return wishlist;
 };
 
-export const getWishlistByUser = async (userId: ObjectId): Promise<WishlistModel[]> => {
+export const getWishlistByUser = async (userId: ObjectId): Promise<any[]> => {
   const db = await getDb();
   const wishlist = await db
-    .collection<WishlistModel>("Wishlist")
-    .find({ userId })
+    .collection("Wishlist")
+    .aggregate([
+      {
+        $match: { userId }
+      },
+      {
+        $lookup: {
+          from: "Products",
+          localField: "productId",
+          foreignField: "_id",
+          as: "product"
+        }
+      },
+      {
+        $unwind: "$product"
+      }
+    ])
     .toArray();
   return wishlist;
 };
