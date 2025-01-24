@@ -6,7 +6,13 @@ export type WishlistModel = {
     userId: ObjectId,
     productId: ObjectId,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    product?: {
+        _id: ObjectId,
+        name: string,
+        thumbnail: string,
+        price: number
+    }
 }
 
 const DATABASE_NAME = process.env.MONGODB_DBNAME;
@@ -28,7 +34,7 @@ export const addToWishlist = async (userId: ObjectId, productId: ObjectId) => {
   return wishlist;
 };
 
-export const getWishlistByUser = async (userId: ObjectId): Promise<any[]> => {
+export const getWishlistByUser = async (userId: ObjectId): Promise<WishlistModel[]> => {
   const db = await getDb();
   const wishlist = await db
     .collection("Wishlist")
@@ -48,6 +54,14 @@ export const getWishlistByUser = async (userId: ObjectId): Promise<any[]> => {
         $unwind: "$product"
       }
     ])
-    .toArray();
+    .toArray() as WishlistModel[];
   return wishlist;
+};
+
+export const deleteWishlist = async (id: ObjectId) => {
+  const db = await getDb();
+  const result = await db.collection("Wishlist").deleteOne({
+    _id: id
+  });
+  return result;
 };
