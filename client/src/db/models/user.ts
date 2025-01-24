@@ -35,3 +35,9 @@ export const createUser = async (user: UserModelCreateInput) => {
   const result = await db.collection("Users").insertOne(createUser);
   return result;
 };
+
+export const findUserByEmail = async (email: string): Promise<UserModel | null> => {
+  const db = await getDb();
+  const user = await db.collection<UserModel>("Users").findOne({ email });
+  return user
+};
