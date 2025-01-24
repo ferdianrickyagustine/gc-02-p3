@@ -2,7 +2,6 @@ const Footer = () => {
   return (
     <footer className="bg-white mt-8">
       <div className="max-w-[1188px] mx-auto px-4">
-        {/* Top Categories & Brands Section */}
         <div className="py-8 border-b">
           <h3 className="font-bold mb-4 text-[#0f136d]">TOP CATEGORIES & BRANDS</h3>
           <div className="grid grid-cols-4 gap-8 text-sm text-gray-600">
@@ -89,7 +88,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Customer Care Section */}
         <div className="py-8 border-b">
           <div className="grid grid-cols-4 gap-8">
             <div>
@@ -120,7 +118,6 @@ const Footer = () => {
               <div className="mb-8">
                 <h3 className="font-bold mb-4 text-[#0f136d]">PAYMENT METHODS</h3>
                 <div className="grid grid-cols-4 gap-2">
-                  {/* Payment icons would go here */}
                   <div className="w-12 h-8 bg-gray-100 rounded"></div>
                   <div className="w-12 h-8 bg-gray-100 rounded"></div>
                   <div className="w-12 h-8 bg-gray-100 rounded"></div>
@@ -130,7 +127,6 @@ const Footer = () => {
               <div>
                 <h3 className="font-bold mb-4 text-[#0f136d]">DELIVERY SERVICES</h3>
                 <div className="grid grid-cols-4 gap-2">
-                  {/* Delivery icons would go here */}
                   <div className="w-12 h-8 bg-gray-100 rounded"></div>
                   <div className="w-12 h-8 bg-gray-100 rounded"></div>
                   <div className="w-12 h-8 bg-gray-100 rounded"></div>
@@ -141,7 +137,6 @@ const Footer = () => {
             <div>
               <h3 className="font-bold mb-4 text-[#0f136d]">VERIFIED BY</h3>
               <div className="grid grid-cols-3 gap-2">
-                {/* Verification icons would go here */}
                 <div className="w-12 h-12 bg-gray-100 rounded"></div>
                 <div className="w-12 h-12 bg-gray-100 rounded"></div>
                 <div className="w-12 h-12 bg-gray-100 rounded"></div>
@@ -150,7 +145,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Section */}
         <div className="py-8">
           <div className="grid grid-cols-3 gap-8 text-sm text-gray-600">
             <div>
@@ -171,9 +165,6 @@ const Footer = () => {
                 Shop with peace of mind with Lazada's multiple payment options including cash-on-delivery, bank transfer, credit card, and installment plans.
               </p>
             </div>
-          </div>
-          <div className="mt-8 text-center text-xs text-gray-500">
-            © Lazada 2025
           </div>
         </div>
       </div>
