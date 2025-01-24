@@ -7,6 +7,9 @@ export default function Navbar() {
         <Link href="/">
           <label className="text-base cursor-pointer">Home</label>
         </Link>
+        <Link href="/wishlist">
+          <label className="text-base cursor-pointer">Wishlist</label>
+        </Link>
         <Link href="/login">
           <label className="text-base cursor-pointer">Login</label>
         </Link>
@@ -15,7 +18,6 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* Original Navbar (Sticky) */}
       <div className="sticky top-0 bg-white flex p-2 justify-around items-center border-b border-gray-300 z-50">
         <Link href="/">
           <div className="flex items-center ml-10">

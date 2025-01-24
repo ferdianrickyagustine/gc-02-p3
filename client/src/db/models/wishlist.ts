@@ -28,10 +28,10 @@ export const addToWishlist = async (userId: ObjectId, productId: ObjectId) => {
   return wishlist;
 };
 
-export const getWishlistByUser = async (userId: ObjectId) => {
+export const getWishlistByUser = async (userId: ObjectId): Promise<WishlistModel[]> => {
   const db = await getDb();
   const wishlist = await db
-    .collection("Wishlist")
+    .collection<WishlistModel>("Wishlist")
     .find({ userId })
     .toArray();
   return wishlist;
