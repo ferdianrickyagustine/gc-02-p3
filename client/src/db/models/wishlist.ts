@@ -58,10 +58,10 @@ export const getWishlistByUser = async (userId: ObjectId): Promise<WishlistModel
   return wishlist;
 };
 
-export const deleteWishlist = async (id: ObjectId) => {
+export const deleteWishlist = async (id: string | ObjectId) => {
   const db = await getDb();
   const result = await db.collection("Wishlist").deleteOne({
-    _id: id
+    _id: new ObjectId(id)
   });
   return result;
 };

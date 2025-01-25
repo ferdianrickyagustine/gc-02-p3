@@ -1,4 +1,3 @@
-import Navbar from "@/components/navbar";
 import { getProductBySlug } from "@/db/models/product";
 
 const ProductPage = async ({ params }: { params: { slug: string } }) => {
@@ -20,20 +19,15 @@ const ProductPage = async ({ params }: { params: { slug: string } }) => {
 
   return (
     <>
-      <Navbar />
-
-      {/* Atas Section - Top Section */}
       <section className="py-8 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4">
           <div className="lg:flex space-x-8">
             <div className="lg:w-1/2 w-full justify-center mb-8 lg:mb-0">
-              {/* Main Image */}
               <img
                 src={product.thumbnail}
                 alt={product.name}
                 className="w-full h-auto max-w-[600px] object-cover rounded-lg shadow-lg"
               />
-              {/* Thumbnail Images */}
               <div className="grid grid-cols-5 gap-2 mt-4">
                 {product.images.map((image, idx) => (
                   <div key={idx} className="relative">
@@ -54,7 +48,6 @@ const ProductPage = async ({ params }: { params: { slug: string } }) => {
                 <label className="text-blue-500">⭐⭐⭐⭐⭐ 5 Penilaian</label>
               </div>
               <p className="text-lg text-gray-600 mt-2">{product.excerpt}</p>
-              {/* Tags */}
               <div className="mt-4">
                 <span className="text-sm text-gray-600 font-semibold">
                   Tags:{" "}
@@ -117,14 +110,12 @@ const ProductPage = async ({ params }: { params: { slug: string } }) => {
           </div>
       </section>
 
-      {/* Bawah Section - Bottom Section with Full Description */}
       <section className="py-8 bg-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-2xl font-semibold text-gray-900">
             Product Description
           </h2>
           <p className="mt-4 text-lg text-gray-600">{product.description}</p>
-          {/* You can add other sections here like creation date, etc. */}
           <div className="mt-6 text-sm text-gray-500">
             <p>
               Created At: {new Date(product.createdAt).toLocaleDateString()}

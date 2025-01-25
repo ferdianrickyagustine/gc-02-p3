@@ -18,21 +18,13 @@ const wishlistSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("token");
-
-    if (!token) {
+    const uid = request.headers.get("x-user-id");
+    console.log(uid, "<<<<<<<<<<<<<")
+    
+    if (!uid) {
       return NextResponse.json<MyResponse<null>>({
         statusCode: 401,
         error: "Unauthorized - Please login first"
-      }, { status: 401 });
-    }
-
-    const payload = await readPayloadJose<{ id: string }>(token.value);
-    if (!payload.id) {
-      return NextResponse.json<MyResponse<null>>({
-        statusCode: 401,
-        error: "Invalid token"
       }, { status: 401 });
     }
 
@@ -46,7 +38,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    const userId = new ObjectId(payload.id);
+    const userId = new ObjectId(uid);
     const productId = new ObjectId(validatedBody.data.productId);
 
     const result = await addToWishlist(userId, productId);

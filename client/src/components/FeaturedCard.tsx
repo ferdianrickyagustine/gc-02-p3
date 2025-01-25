@@ -4,6 +4,7 @@ import { ProductModel } from "@/db/models/product";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
 
 const FeaturedCard = ({ products }: { products: string }) => {
   const parsedProducts = JSON.parse(products) as ProductModel[];
@@ -41,12 +42,11 @@ const FeaturedCard = ({ products }: { products: string }) => {
         throw new Error(data.error || 'Failed to add to wishlist');
       }
 
-      // Show success feedback (you might want to add a toast notification here)
-      alert('Added to wishlist successfully!');
-      
+      toast.success('Berhasil ditambahkan ke wishlist! 🎉');
+      router.push('/wishlist');
     } catch (error) {
       console.error('Error adding to wishlist:', error);
-      alert('Failed to add to wishlist. Please try again.');
+      toast.error('Gagal menambahkan ke wishlist 😢');
     } finally {
       setLoading(prev => ({ ...prev, [productId]: false }));
     }

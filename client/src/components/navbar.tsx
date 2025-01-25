@@ -2,11 +2,17 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { handleLogout } from '../utils/logout';
 
-export default function Navbar() {
+type NavbarProps = {
+  token?: string;
+};
+
+export default function Navbar({ token }: NavbarProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,21 +21,40 @@ export default function Navbar() {
     }
   };
 
+  if (pathname === '/login' || pathname === '/register') {
+    return null;
+  }
+
+  const linkClassName = "text-base cursor-pointer";
+
   return (
     <>
       <div className="bg-gray-200 text-gray-400 flex justify-end gap-8 mr-20 z-40">
         <Link href="/">
-          <label className="text-base cursor-pointer">Home</label>
+          <label className={linkClassName}>Home</label>
         </Link>
         <Link href="/wishlist">
-          <label className="text-base cursor-pointer">Wishlist</label>
+          <label className={linkClassName}>Wishlist</label>
         </Link>
-        <Link href="/login">
-          <label className="text-base cursor-pointer">Login</label>
-        </Link>
-        <Link href="/register">
-          <label className="text-base cursor-pointer">Daftar</label>
-        </Link>
+        {token ? (
+          <form action={handleLogout}>
+            <button
+              type="submit"
+              className={linkClassName}
+            >
+              Logout
+            </button>
+          </form>
+        ) : (
+          <>
+            <Link href="/login">
+              <label className={linkClassName}>Sign in</label>
+            </Link>
+            <Link href="/register">
+              <label className={linkClassName}>Sign up</label>
+            </Link>
+          </>
+        )}
       </div>
 
       <div className="sticky top-0 bg-white flex p-2 justify-around items-center border-b border-gray-300 z-50">
