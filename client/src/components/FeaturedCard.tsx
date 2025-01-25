@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
+import { addToWishlist } from "@/app/wishlist/action";
 
 const FeaturedCard = ({ products }: { products: string }) => {
   const parsedProducts = JSON.parse(products) as ProductModel[];
@@ -24,29 +25,14 @@ const FeaturedCard = ({ products }: { products: string }) => {
     try {
       setLoading(prev => ({ ...prev, [productId]: true }));
       
-      const response = await fetch('/api/wishlist', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ productId }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          router.push('/login');
-          return;
-        }
-        throw new Error(data.error || 'Failed to add to wishlist');
-      }
-
+      const result = await addToWishlist(productId);
+      
       toast.success('Berhasil ditambahkan ke wishlist! 🎉');
-      router.push('/wishlist');
-    } catch (error) {
-      console.error('Error adding to wishlist:', error);
-      toast.error('Gagal menambahkan ke wishlist 😢');
+    } catch (error: any) {
+      if (!error.digest?.includes('NEXT_REDIRECT')) {
+        console.error('Error adding to wishlist:', error);
+        toast.error('Gagal menambahkan ke wishlist 😢');
+      }
     } finally {
       setLoading(prev => ({ ...prev, [productId]: false }));
     }

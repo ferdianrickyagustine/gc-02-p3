@@ -35,12 +35,18 @@ export const getWishlists = async () => {
 
 export const addToWishlist = async (productId: string) => {
     try {
-
+        const cookieStore = await cookies();
+        const token = cookieStore.get("token");
+        console.log(token, "<<<<<<<<<<<<<<<<<<< ini token");
+        
+        if (!token) {
+            redirect("/login");
+        }
         const response = await fetch(`${BASE_URL}/api/wishlist`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Cookie": (await cookies()).toString()
+                "Cookie": cookieStore.toString()
             },
             body: JSON.stringify({ productId })
         });
