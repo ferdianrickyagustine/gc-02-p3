@@ -30,8 +30,7 @@ const FeaturedCard = ({ products }: { products: string }) => {
       toast.success('Berhasil ditambahkan ke wishlist! 🎉');
     } catch (error: any) {
       if (!error.digest?.includes('NEXT_REDIRECT')) {
-        console.error('Error adding to wishlist:', error);
-        toast.error('Gagal menambahkan ke wishlist 😢');
+        toast.error('Gagal menambahkan ke wishlist');
       }
     } finally {
       setLoading(prev => ({ ...prev, [productId]: false }));

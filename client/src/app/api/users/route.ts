@@ -49,7 +49,6 @@ export const POST = async (request: Request) => {
     );
   } catch (error) {
     if (error instanceof z.ZodError) {
-      console.log(error);
 
       const errorPath = error.issues[0].path[0];
       const errorMessage = error.issues[0].message;
