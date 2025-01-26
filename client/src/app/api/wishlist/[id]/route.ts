@@ -2,15 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { deleteWishlist } from "@/db/models/wishlist";
 
-interface RouteContext {
-    params: {
-        id: string;
-    };
-}
-
 export async function DELETE(
-    _request: NextRequest,
-    context: RouteContext
+    request: NextRequest,
+    { params }: { params: { id: string } }
 ) {
     try {
         const cookieStore = await cookies();
@@ -23,17 +17,7 @@ export async function DELETE(
             );
         }
 
-        const result = await deleteWishlist(context.params.id);
-
-        if (!result.deletedCount) {
-            return NextResponse.json(
-                {
-                    statusCode: 404,
-                    error: "Wishlist item not found",
-                },
-                { status: 404 }
-            );
-        }
+        await deleteWishlist(params.id);
 
         return NextResponse.json(
             {
