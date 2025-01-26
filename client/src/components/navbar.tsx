@@ -17,9 +17,7 @@ export default function Navbar({ token }: NavbarProps) {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/products?search=${encodeURIComponent(searchQuery)}`);
-    }
+      router.push(`/products?q=${searchQuery}`);
   };
 
   if (pathname === '/login' || pathname === '/register') {

@@ -2,7 +2,7 @@ import { Db, ObjectId } from "mongodb";
 import { mongoclient } from "../config/connection";
 
 export type ProductModel = {
-  _id: ObjectId;
+  _id: ObjectId | string;
   name: string;
   slug: string;
   description: string;
@@ -31,15 +31,20 @@ export const getDb = async () => {
   return db;
 };
 
-export const getProducts = async (): Promise<ProductModel[]> => {
+export const getProducts = async (search?: string, page?: number, limit?: number): Promise<ProductModel[]> => {
   const db = await getDb();
 
-  const products = (await db
-    .collection("Products")
-    .find({})
-    .toArray()) as ProductModel[];
-  return products;
+  const filter = search
+  ? { name: { $regex: search, $options: "i" } }
+  : {};
+
+  const skip = page && page > 1 ? (page - 1) * (limit || 10) : 0;
+
+  const products = await db.collection("Products").find(filter).skip(skip).limit(limit || 10).toArray() as ProductModel[];
+
+  return products
 };
+
 
 export const getProductBySlug = async (slug: string) => {
   const db = await getDb();

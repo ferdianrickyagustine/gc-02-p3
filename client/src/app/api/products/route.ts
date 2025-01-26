@@ -1,18 +1,28 @@
-import { NextResponse } from 'next/server';
-import { getProductPagination } from "@/db/models/product";
+import { NextResponse, NextRequest } from 'next/server';
+import { getProducts } from "@/db/models/product";
 
 
-export const dynamic = 'force-dynamic'
-
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '10');
-
+export async function GET(request: NextRequest) {
   try {
-    const paginatedData = await getProductPagination(page, limit);
-    
-    return NextResponse.json(paginatedData, { status: 200 });
+  const search = request.nextUrl.searchParams.get("q");
+    const limit = request.nextUrl.searchParams.get("l");
+    const page = request.nextUrl.searchParams.get("p");
+
+    const limitNumber = limit ? parseInt(limit) : 10;
+    const pagination = page ? parseInt(page) : 1;
+
+    const products = await getProducts(search || undefined, pagination, limitNumber);
+
+    return NextResponse.json(
+      {
+        statusCode: 200,
+        data: products
+      },
+      {
+        status: 200
+      }
+    );
+
   } catch (error) {
     console.error('Error:', error);
     return NextResponse.json(

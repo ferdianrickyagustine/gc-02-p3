@@ -34,7 +34,7 @@ export const getWishlists = async () => {
     }
 };
 
-export const addToWishlist = async (productId: string) => {
+export const addWishlist = async (productId: string) => {
     try {
         const cookieStore = await cookies();
         const token = cookieStore.get("token");

@@ -1,10 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { deleteWishlist } from "@/db/models/wishlist";
 
 export async function DELETE(
-    request: NextRequest,
-    { params }: { params: { id: string } }
+    _req: Request,
 ) {
     try {
         const cookieStore = await cookies();
@@ -17,7 +16,17 @@ export async function DELETE(
             );
         }
 
-        await deleteWishlist(params.id);
+        // Get id from URL
+        const id = _req.url.split('/').pop();
+        
+        if (!id) {
+            return NextResponse.json(
+                { error: "ID not found" },
+                { status: 400 }
+            );
+        }
+
+        await deleteWishlist(id);
 
         return NextResponse.json(
             {

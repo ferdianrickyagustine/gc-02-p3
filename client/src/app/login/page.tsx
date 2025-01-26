@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import ErrorComponent from "@/components/ErrorComponent";
 import { loginHandler } from "./action";
-const LoginPage = () => {
+export default function LoginPage () {
   
 
   return (
@@ -11,6 +11,9 @@ const LoginPage = () => {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="flex justify-center pt-6">
+            <Link
+              href="/"
+              className="flex items-center justify-center min-h-full">
             <Image
               src="https://img.lazcdn.com/g/tps/images/ims-web/TB1Hs8GaMFY.1VjSZFnXXcFHXXa.png"
               width={150}
@@ -18,6 +21,7 @@ const LoginPage = () => {
               className="w-1/2 h-auto"
               alt="logo"
             />
+            </Link>
           </div>
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-black text-center">
@@ -60,7 +64,7 @@ const LoginPage = () => {
               </div>
               <button
                 type="submit"
-                className="w-full text-white bg-red-500 p-2 rounded-lg"
+                className="w-full text-white bg-blue-500 p-2 rounded-lg"
               >
                 Login
               </button>
@@ -81,4 +85,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+

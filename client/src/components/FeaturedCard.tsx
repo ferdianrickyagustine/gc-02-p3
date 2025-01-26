@@ -2,92 +2,114 @@
 
 import { ProductModel } from "@/db/models/product";
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
-import { addToWishlist } from "@/app/wishlist/action";
+import { addWishlist } from "@/app/wishlist/action";
+import { useRouter } from "next/navigation";
+import { Heart } from 'lucide-react';
 
-const FeaturedCard = ({ products }: { products: string }) => {
-  const parsedProducts = JSON.parse(products) as ProductModel[];
-  const [loading, setLoading] = useState<Record<string, boolean>>({});
-  
-  const formatRupiah = (price: number) => {
+const FeaturedCard = ({ products }: { products: ProductModel }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
+
+  const hasDiscount = products.price > 5000000;
+  const discountAmount = hasDiscount ? 15 : 0; // Example discount percentage
+  const originalPrice = products.price;
+  const discountedPrice = hasDiscount ? products.price * (1 - discountAmount / 100) : products.price;
+
+  const formatPrice = (price: number) => {
     return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
+      style: 'decimal',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(price);
   };
 
-  const handleAddToWishlist = async (productId: string) => {
-    try {
-      setLoading(prev => ({ ...prev, [productId]: true }));
-      
-      await addToWishlist(productId);
-      
-      toast.success('Berhasil ditambahkan ke wishlist! 🎉');
-    } catch (error: unknown) {
-      const errorWithDigest = error as { digest?: string };
-      if (!errorWithDigest?.digest?.includes('NEXT_REDIRECT')) {
-        toast.error('Gagal menambahkan ke wishlist');
+  const handleCardClick = () => {
+    router.push(`/products/${products.slug}`);
+  };
+
+  const AddWishlistButton = ({ productId }: { productId: string }) => {
+    const router = useRouter();
+  
+    const addToWishlist = async (productId: string) => {
+      try {
+        await addWishlist(productId);
+        toast.success("Berhasil menambahkan ke wishlist!");
+        router.refresh();
+      } catch (error) {
+        toast.error("Gagal menambahkan ke wishlist");
+        console.error("Gagal menambahkan ke wishlist:", error);
       }
-    } finally {
-      setLoading(prev => ({ ...prev, [productId]: false }));
-    }
+    };
+  
+    return (
+      <button
+        className="absolute top-2 right-2 p-2 rounded-full bg-white/80 hover:bg-white transition-colors duration-200 shadow-sm"
+        onClick={(e) => {
+          e.stopPropagation();
+          addToWishlist(productId);
+        }}
+        aria-label="Add to Wishlist"
+      >
+        <Heart className="w-5 h-5 text-red-500" />
+      </button>
+    );
   };
 
   return (
-    <>
-      {parsedProducts.map((product) => (
-        <div key={product._id.toString()} className="bg-white rounded-lg shadow-md">
-          <div className="relative pt-[100%]">
-            <Image
-              src={product.thumbnail}
-              alt={product.name}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="absolute top-0 left-0 w-full h-full object-cover"
-              priority
-            />
+    <div
+      className="relative w-[220px] bg-white border border-gray-200 rounded-lg shadow hover:shadow-xl transition-all duration-200 cursor-pointer"
+      onClick={handleCardClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="relative w-full h-[220px] overflow-hidden">
+        {hasDiscount && (
+          <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
+            <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded shadow-sm">
+              -{discountAmount}%
+            </span>
+            <span className="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded shadow-sm">
+              Mall
+            </span>
           </div>
+        )}
+        <Image
+          src={products.thumbnail}
+          alt={products.name}
+          fill
+          className={`object-cover transition-transform duration-300 ${isHovered ? 'scale-110' : 'scale-100'}`}
+          unoptimized
+        />
+      </div>
 
-          <div className="p-3 flex flex-col flex-grow">
-            <Link href={`/products/${product.slug}`}>
-              <h3 className="text-sm text-gray-600 mb-2 line-clamp-2 min-h-[2.5rem] hover:text-[#f57224]">
-                {product.name}
-              </h3>
-            </Link>
-
-            <div className="mt-auto flex justify-between items-center">
-              <div className="text-[#f57224] text-lg font-medium">
-                {formatRupiah(product.price)}
-              </div>
-              
-              <button 
-                className={`text-gray-400 hover:text-[#f57224] transition-colors duration-200 ${loading[product._id.toString()] ? 'opacity-50 cursor-not-allowed' : ''}`}
-                onClick={() => handleAddToWishlist(product._id.toString())}
-                disabled={loading[product._id.toString()]}
-                aria-label="Add to wishlist"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 1024 1024"
-                  className={`icon ${loading[product._id.toString()] ? 'animate-pulse' : ''}`}
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M983.384 381.465c0-147.456-119.467-266.923-266.923-266.923-81.465 0-154.283 36.409-203.207 93.866-48.925-57.458-121.856-93.866-203.207-93.866-147.456 0-266.923 119.467-266.923 266.923 0 77.369 35.613 142.109 85.561 195.811L514.275 947.964l378.994-366.592c48.014-50.062 90.112-120.377 90.112-199.907Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </button>
-            </div>
+      <div className="p-3 flex flex-col gap-2">
+        <h3 className="text-sm text-gray-900 line-clamp-2 leading-tight hover:text-orange-500 transition-colors duration-200">
+          {products.name}
+        </h3>
+        
+        <AddWishlistButton productId={products._id.toString()} />
+        <div className="flex flex-col">
+          <span className="text-lg font-bold text-orange-500">
+            Rp {formatPrice(discountedPrice)}
+          </span>
+          {hasDiscount && (
+            <span className="text-xs text-gray-500 line-through">
+              Rp {formatPrice(originalPrice)}
+            </span>
+          )}
+        </div>
+        
+        <div className="flex items-center gap-1 mt-1">
+          <div className="flex items-center">
+            <span className="text-xs text-gray-500">⭐ 4.9</span>
+            <span className="mx-1 text-gray-300">|</span>
+            <span className="text-xs text-gray-500">Terjual 1rb+</span>
           </div>
         </div>
-      ))}
-    </>
+      </div>
+    </div>
   );
 };
 
