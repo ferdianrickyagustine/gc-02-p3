@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { readPayloadJose } from "@/utils/jwt";
-import { ObjectId } from "mongodb";
 import { deleteWishlist } from "@/db/models/wishlist";
 
 export async function DELETE(
