@@ -4,26 +4,26 @@ import { readPayloadJose } from "@/utils/jwt";
 import { ObjectId } from "mongodb";
 import { deleteWishlist } from "@/db/models/wishlist";
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+type RouteParams = {
+  params: {
+    id: string;
+  };
+};
+
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("token");
 
     if (!token) {
       return NextResponse.json(
-        {
-          statusCode: 401,
-          error: "Unauthorized - Please login first",
-        },
-        { status: 401 }
+          { error: "Unauthorized" },
+          { status: 401 }
       );
-    }
+  }
 
     await readPayloadJose<{ id: string }>(token.value);
-    
+
     const result = await deleteWishlist(new ObjectId(params.id));
 
     if (result.deletedCount === 0) {
