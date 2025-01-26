@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "${BASE_URL}";
+
 const RegisterPage = () => {
   const formActionHandler = async (formData: FormData) => {
     "use server";
 
-    const response = await fetch("http://localhost:3000/api/users", {
+    const response = await fetch(`${BASE_URL}/api/users`, {
       method: "POST",
       body: JSON.stringify({
         name: formData.get("name"),

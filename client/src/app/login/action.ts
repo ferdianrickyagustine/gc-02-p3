@@ -9,6 +9,8 @@ import { z } from "zod";
 
 import { cookies } from "next/headers";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
 export const loginHandler = async (formData: FormData) => {
 	const loginInputSchema = z.object({
 		email: z.string().email("Email tidak valid").min(1, "Email tidak boleh kosong"),
@@ -19,7 +21,7 @@ export const loginHandler = async (formData: FormData) => {
 	const email = formData.get("email");
 	const password = formData.get("password");
     if (!email || !password) {
-        return redirect("http://localhost:3000/login?error=Email%20atau%20Password%20tidak%20boleh%20kosong");
+        return redirect(`${BASE_URL}/login?error=Email%20atau%20Password%20tidak%20boleh%20kosong`);
       }
 	const parsedData = loginInputSchema.safeParse({
 		email,
@@ -31,13 +33,13 @@ export const loginHandler = async (formData: FormData) => {
 		const errMessage = parsedData.error.issues[0].message;
 		const errFinalMessage = `${errPath} - ${errMessage}`;
 
-		return redirect(`http://localhost:3000/login?error=${errFinalMessage}`);
+		return redirect(`${BASE_URL}/login?error=${errFinalMessage}`);
 	}
 
 	const user = await findUserByEmail(parsedData.data.email);
 
 	if (!user || !compare(parsedData.data.password, user.password)) {
-		return redirect("http://localhost:3000/login?error=Invalid%20credentials");
+		return redirect(`${BASE_URL}/login?error=Invalid%20credentials`);
 	}
 
 	const payload = {
@@ -55,5 +57,5 @@ export const loginHandler = async (formData: FormData) => {
 		sameSite: "strict",
 	});
 
-	return redirect("http://localhost:3000/");
+	return redirect(`${BASE_URL}`);
 };

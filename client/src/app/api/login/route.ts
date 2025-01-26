@@ -6,7 +6,6 @@ import { z } from "zod";
 import { cookies } from "next/headers";
 import { signToken } from "@/utils/jwt";
 import { compare } from "@/utils/bcrypt";
-
 export const doLogin = async (formData: FormData) => {
   const loginInputSchema = z.object({
     email: z.string().email(),
@@ -20,19 +19,20 @@ export const doLogin = async (formData: FormData) => {
     email,
     password,
   });
-
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  
   if (!parsedData.success) {
     const errPath = parsedData.error.issues[0].path[0];
     const errMessage = parsedData.error.issues[0].message;
     const errFinalMessage = `${errPath} - ${errMessage}`;
 
-    return redirect(`http://localhost:3000/login?error=${errFinalMessage}`);
+    return redirect(`${BASE_URL}/login?error=${errFinalMessage}`);
   }
 
   const user = await findUserByEmail(parsedData.data.email);
 
   if (!user || !compare(parsedData.data.password, user.password)) {
-    return redirect("http://localhost:3000/login?error=Invalid%20credentials");
+    return redirect(`${BASE_URL}/login?error=Invalid%20credentials`);
   }
 
   const payload = {
@@ -50,5 +50,5 @@ export const doLogin = async (formData: FormData) => {
     sameSite: "strict",
   });
 
-  return redirect("http://localhost:3000/");
+  return redirect(`${BASE_URL}`);
 };

@@ -17,14 +17,14 @@ export const getWishlists = async () => {
             cache: "no-store"
         });
 
-        console.log(response, "<<<<<<<<<<<<<<<<<<< ini response wishlist");
+        // console.log(response, "<<<<<<<<<<<<<<<<<<< ini response wishlist");
         
         if (!response.ok) {
             throw new Error("Failed to fetch wishlists");
         }
 
         const data = await response.json();
-        console.log(data, "<<<<<<<<<<<<<<<<<<< ini data wishlist");
+        // console.log(data, "<<<<<<<<<<<<<<<<<<< ini data wishlist");
         
         return data.data || [];
     } catch (error) {
@@ -37,7 +37,7 @@ export const addToWishlist = async (productId: string) => {
     try {
         const cookieStore = await cookies();
         const token = cookieStore.get("token");
-        console.log(token, "<<<<<<<<<<<<<<<<<<< ini token");
+        // console.log(token, "<<<<<<<<<<<<<<<<<<< ini token");
         
         if (!token) {
             redirect("/login");
