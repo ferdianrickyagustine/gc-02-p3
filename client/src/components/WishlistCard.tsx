@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { deleteWishlist } from '@/app/wishlist/action';
 import { toast } from 'sonner';
+import Image from 'next/image';
 
 type WishlistCardProps = {
     _id: string;
@@ -29,11 +30,15 @@ const WishlistCard = ({ _id, product }: WishlistCardProps) => {
 
     return (
         <div className="bg-white rounded-lg shadow-md p-4">
-            <img 
-                src={product.thumbnail} 
-                alt={product.name}
-                className="w-full h-48 object-cover rounded-md mb-4"
-            />
+            <div className="relative h-48 mb-4">
+                <Image 
+                    src={product.thumbnail} 
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover rounded-md"
+                />
+            </div>
             <h3 className="font-semibold mb-2">{product.name}</h3>
             <p className="text-gray-600 mb-4">
                 Rp {product.price.toLocaleString('id-ID')}

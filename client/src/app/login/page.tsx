@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import ErrorComponent from "@/components/ErrorComponent";
 import { loginHandler } from "./action";
@@ -10,8 +11,10 @@ const LoginPage = () => {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="flex justify-center pt-6">
-            <img
+            <Image
               src="https://img.lazcdn.com/g/tps/images/ims-web/TB1Hs8GaMFY.1VjSZFnXXcFHXXa.png"
+              width={150}
+              height={50}
               className="w-1/2 h-auto"
               alt="logo"
             />

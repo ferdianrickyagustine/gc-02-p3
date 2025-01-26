@@ -3,6 +3,7 @@
 import { ProductModel } from "@/db/models/product";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { toast } from "sonner";
 import { addToWishlist } from "@/app/wishlist/action";
 
@@ -26,11 +27,10 @@ const FeaturedCard = ({ products }: { products: string }) => {
       await addToWishlist(productId);
       
       toast.success('Berhasil ditambahkan ke wishlist! 🎉');
-    } catch (error: any) {
-      console.error("Error adding to wishlist:", error);
-        
-      if (!error?.digest?.includes('NEXT_REDIRECT')) {
-          toast.error('Gagal menambahkan ke wishlist');
+    } catch (error: unknown) {
+      const errorWithDigest = error as { digest?: string };
+      if (!errorWithDigest?.digest?.includes('NEXT_REDIRECT')) {
+        toast.error('Gagal menambahkan ke wishlist');
       }
     } finally {
       setLoading(prev => ({ ...prev, [productId]: false }));
@@ -40,19 +40,17 @@ const FeaturedCard = ({ products }: { products: string }) => {
   return (
     <>
       {parsedProducts.map((product) => (
-        <div
-          key={product._id.toString()}
-          className="bg-white rounded-sm shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col"
-        >
-          <Link href={`/products/${product.slug}`}>
-            <div className="relative pt-[100%] overflow-hidden">
-              <img
-                src={product.thumbnail || 'https://placehold.co/300x300/png?text=No+Image'}
-                alt={product.name}
-                className="absolute top-0 left-0 w-full h-full object-cover"
-              />
-            </div>
-          </Link>
+        <div key={product._id.toString()} className="bg-white rounded-lg shadow-md">
+          <div className="relative pt-[100%]">
+            <Image
+              src={product.thumbnail}
+              alt={product.name}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="absolute top-0 left-0 w-full h-full object-cover"
+              priority
+            />
+          </div>
 
           <div className="p-3 flex flex-col flex-grow">
             <Link href={`/products/${product.slug}`}>

@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
@@ -29,9 +29,11 @@ const RegisterPage = () => {
       }
 
       return redirect("/login");
-    } catch (error: any) {
-      if (error?.digest?.includes('NEXT_REDIRECT')) {
-        throw error; 
+    } catch (error: unknown) {
+      type ErrorWithDigest = Error & { digest?: string };
+      
+      if (error instanceof Error && (error as ErrorWithDigest).digest?.includes('NEXT_REDIRECT')) {
+        throw error;
       }
       console.error("Registration error:", error);
       return redirect("/register?error=Something went wrong");
@@ -43,8 +45,10 @@ const RegisterPage = () => {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="flex justify-center pt-6">
-            <img
+            <Image
               src="https://img.lazcdn.com/g/tps/images/ims-web/TB1Hs8GaMFY.1VjSZFnXXcFHXXa.png"
+              width={150}
+              height={50}
               className="w-1/2 h-auto"
               alt="logo"
             />

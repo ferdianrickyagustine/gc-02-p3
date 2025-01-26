@@ -2,6 +2,7 @@
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import Image from 'next/image';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -34,11 +35,13 @@ const Banner = () => {
           {bannerImages.map((banner, index) => (
             <SwiperSlide key={index}>
               <div className="aspect-[16/6]">
-                <img
+                <Image
                   src={banner}
                   alt={`Banner ${index + 1}`}
+                  width={1976}
+                  height={688}
                   className="w-full h-full object-cover"
-                  
+                  priority={index === 0}
                 />
               </div>
             </SwiperSlide>

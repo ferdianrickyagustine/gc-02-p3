@@ -1,4 +1,5 @@
 import { getProductBySlug } from "@/db/models/product";
+import Image from 'next/image';
 
 const ProductPage = async ({ params }: { params: { slug: string } }) => {
   const slug = params?.slug;
@@ -23,17 +24,21 @@ const ProductPage = async ({ params }: { params: { slug: string } }) => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="lg:flex space-x-8">
             <div className="lg:w-1/2 w-full justify-center mb-8 lg:mb-0">
-              <img
+              <Image
                 src={product.thumbnail}
                 alt={product.name}
+                width={600}
+                height={600}
                 className="w-full h-auto max-w-[600px] object-cover rounded-lg shadow-lg"
               />
               <div className="grid grid-cols-5 gap-2 mt-4">
                 {product.images.map((image, idx) => (
                   <div key={idx} className="relative">
-                    <img
+                    <Image
                       src={image}
                       alt={`Image ${idx + 1}`}
+                      width={120}
+                      height={120}
                       className="w-full h-auto object-cover rounded-md cursor-pointer hover:opacity-75 transition-all"
                     />
                   </div>
