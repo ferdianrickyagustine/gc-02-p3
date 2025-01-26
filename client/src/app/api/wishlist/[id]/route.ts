@@ -10,7 +10,7 @@ type RouteParams = {
   };
 };
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE({ params }: RouteParams) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("token");
