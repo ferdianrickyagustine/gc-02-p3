@@ -1,28 +1,37 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "${BASE_URL}";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 const RegisterPage = () => {
   const formActionHandler = async (formData: FormData) => {
     "use server";
 
-    const response = await fetch(`${BASE_URL}/api/users`, {
-      method: "POST",
-      body: JSON.stringify({
-        name: formData.get("name"),
-        username: formData.get("username"),
-        email: formData.get("email"),
-        password: formData.get("password"),
-      }),
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
+    try {
+      const response = await fetch(`${BASE_URL}/api/users`, {
+        method: "POST",
+        body: JSON.stringify({
+          name: formData.get("name"),
+          username: formData.get("username"),
+          email: formData.get("email"),
+          password: formData.get("password"),
+        }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
 
-    const responseJson = await response.json();
+      if (!response.ok) {
+        const errorData = await response.json();
+        return redirect(`/register?error=${errorData.error}`);
+      }
 
-    redirect("/login");
+      return redirect("/login");
+    } catch (error) {
+      console.error("Error:", error);
+      return redirect("/register?error=Something went wrong");
+    }
   };
 
   return (
@@ -30,7 +39,7 @@ const RegisterPage = () => {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="flex justify-center pt-6">
-            <img
+            <Image
               src="https://img.lazcdn.com/g/tps/images/ims-web/TB1Hs8GaMFY.1VjSZFnXXcFHXXa.png"
               className="w-1/2 h-auto"
               alt="logo"
@@ -127,7 +136,8 @@ const RegisterPage = () => {
               </button>
               <p className="text-sm font-light text-black">
                 Already have an account?{" "}
-                <Link href="/login"
+                <Link
+                  href="/login"
                   className="font-medium text-blue-600 hover:underline "
                 >
                   Login here

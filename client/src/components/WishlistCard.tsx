@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { deleteWishlist } from '@/app/wishlist/action';
 import { toast } from 'sonner';
+import Image from 'next/image';
 
 type WishlistCardProps = {
     _id: string;
@@ -22,13 +23,14 @@ const WishlistCard = ({ _id, product }: WishlistCardProps) => {
             toast.success('Berhasil dihapus dari wishlist! 🗑️');
             router.refresh();
         } catch (error) {
+            console.error("Error:", error);
             toast.error('Gagal menghapus dari wishlist 😢');
         }
     };
 
     return (
         <div className="bg-white rounded-lg shadow-md p-4">
-            <img 
+            <Image 
                 src={product.thumbnail} 
                 alt={product.name}
                 className="w-full h-48 object-cover rounded-md mb-4"

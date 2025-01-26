@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { handleLogout } from '../utils/logout';
+import Image from "next/image";
 
 type NavbarProps = {
   token?: string;
@@ -60,7 +61,7 @@ export default function Navbar({ token }: NavbarProps) {
       <div className="sticky top-0 bg-white flex p-2 justify-around items-center border-b border-gray-300 z-50">
         <Link href="/">
           <div className="flex items-center ml-10">
-            <img
+            <Image
               src="https://img.lazcdn.com/g/tps/images/ims-web/TB1Hs8GaMFY.1VjSZFnXXcFHXXa.png"
               className="w-5/12 h-5/12"
               alt="Lazada"

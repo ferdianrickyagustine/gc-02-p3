@@ -1,6 +1,5 @@
 import { getProductBySlug } from "@/db/models/product";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 
 type MyResponse<T> = {
   statusCode: number;

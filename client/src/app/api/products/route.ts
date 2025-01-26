@@ -1,12 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getProductPagination } from "@/db/models/product";
 
-type MyResponse<T> = {
-  statusCode: number;
-  message?: string;
-  data?: T;
-  error?: string;
-};
 
 export const dynamic = 'force-dynamic'
 
@@ -20,7 +14,7 @@ export async function GET(request: Request) {
     
     return NextResponse.json(paginatedData, { status: 200 });
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       {
         statusCode: 500,

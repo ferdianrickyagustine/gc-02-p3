@@ -35,7 +35,7 @@ const Footer = () => {
               <div>
                 <div className="font-bold mb-2">FASHION</div>
                 <p className="text-xs leading-relaxed">
-                  OEM, levi's, Macbeth, Zada, Alibi Paris, Converse, Puma, Fossil, New Balance, more...
+                  OEM, levis, Macbeth, Zada, Alibi Paris, Converse, Puma, Fossil, New Balance, more...
                 </p>
               </div>
               <div>
@@ -49,7 +49,7 @@ const Footer = () => {
               <div>
                 <div className="font-bold mb-2">HEALTH & BEAUTY</div>
                 <p className="text-xs leading-relaxed">
-                  SK-II, Moment, Herbalife, Dermawand, Philips, L'Oreal, NYX, Maybelline, Nivea, more...
+                  SK-II, Moment, Herbalife, Dermawand, Philips, LOreal, NYX, Maybelline, Nivea, more...
                 </p>
               </div>
               <div>
@@ -150,19 +150,19 @@ const Footer = () => {
             <div>
               <h4 className="font-bold mb-2">Online Shopping Mall</h4>
               <p className="text-xs leading-relaxed">
-                Lazada Group is Southeast Asia's pioneer eCommerce platform. Launched in Indonesia in 2012, Lazada helps more than 155,000 local and international sellers serve 100 million consumers.
+                Lazada Group is Southeast Asias pioneer eCommerce platform. Launched in Indonesia in 2012, Lazada helps more than 155,000 local and international sellers serve 100 million consumers.
               </p>
             </div>
             <div>
               <h4 className="font-bold mb-2">DKI Jakarta Shopping Hub</h4>
               <p className="text-xs leading-relaxed">
-                As Jakarta's premier online shopping destination, we connect this vast and diverse region with millions of products and multiple global/local brands.
+                As Jakartas premier online shopping destination, we connect this vast and diverse region with millions of products and multiple global/local brands.
               </p>
             </div>
             <div>
               <h4 className="font-bold mb-2">Safe and Convenient</h4>
               <p className="text-xs leading-relaxed">
-                Shop with peace of mind with Lazada's multiple payment options including cash-on-delivery, bank transfer, credit card, and installment plans.
+                Shop with peace of mind with Lazadas multiple payment options including cash-on-delivery, bank transfer, credit card, and installment plans.
               </p>
             </div>
           </div>

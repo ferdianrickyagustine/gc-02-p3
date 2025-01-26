@@ -28,7 +28,7 @@ export const getWishlists = async () => {
         
         return data.data || [];
     } catch (error) {
-        console.error("Error fetching wishlists:", error);
+        console.error("Error:", error);
         return [];
     }
 };
@@ -58,7 +58,7 @@ export const addToWishlist = async (productId: string) => {
         revalidatePath("/wishlist");
         redirect("/wishlist");
     } catch (error) {
-        console.error("Error adding to wishlist:", error);
+        console.error("Error:", error);
         throw error;
     }
 };
@@ -68,7 +68,7 @@ export async function deleteWishlist(id: string) {
         await deleteWishlistDb(id)
         return { success: true }
     } catch (error) {
-        console.error('Error deleting wishlist:', error)
+        console.error('Error:', error)
         throw new Error('Failed to delete wishlist')
     }
 }

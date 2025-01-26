@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { cookies } from "next/headers";
-import { readPayloadJose } from "@/utils/jwt";
 import { ObjectId } from "mongodb";
 import { addToWishlist } from "@/db/models/wishlist";
 
@@ -19,7 +17,7 @@ const wishlistSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const uid = request.headers.get("x-user-id");
-    console.log(uid, "<<<<<<<<<<<<<")
+    // console.log(uid, "<<<<<<<<<<<<<")
     
     if (!uid) {
       return NextResponse.json<MyResponse<null>>({
@@ -50,7 +48,7 @@ export async function POST(request: NextRequest) {
     }, { status: 201 });
 
   } catch (error) {
-    console.error("Error adding to wishlist:", error);
+    console.error("Error:", error);
     return NextResponse.json<MyResponse<null>>({
       statusCode: 500,
       error: "Internal server error"

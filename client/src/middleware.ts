@@ -28,6 +28,7 @@ export async function middleware(request: NextRequest) {
                 headers: reqHeaders,
             });
         } catch (error) {
+            console.error("Error:", error);
             return NextResponse.redirect(urlLogin);
         }
     }

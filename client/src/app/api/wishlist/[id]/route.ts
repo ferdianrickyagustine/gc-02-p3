@@ -43,7 +43,7 @@ export async function DELETE(
       },
       { status: 200 }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         statusCode: 500,

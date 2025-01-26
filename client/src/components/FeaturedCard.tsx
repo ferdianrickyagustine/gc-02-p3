@@ -2,15 +2,15 @@
 
 import { ProductModel } from "@/db/models/product";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { addToWishlist } from "@/app/wishlist/action";
+import Error from "next/error";
+import Image from "next/image";
 
 const FeaturedCard = ({ products }: { products: string }) => {
   const parsedProducts = JSON.parse(products) as ProductModel[];
-  const router = useRouter();
-  const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
+  const [loading, setLoading] = useState<Record<string, boolean>>({});
   
   const formatRupiah = (price: number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -25,12 +25,14 @@ const FeaturedCard = ({ products }: { products: string }) => {
     try {
       setLoading(prev => ({ ...prev, [productId]: true }));
       
-      const result = await addToWishlist(productId);
+      await addToWishlist(productId);
       
       toast.success('Berhasil ditambahkan ke wishlist! 🎉');
     } catch (error: any) {
-      if (!error.digest?.includes('NEXT_REDIRECT')) {
-        toast.error('Gagal menambahkan ke wishlist');
+      console.error("Error adding to wishlist:", error);
+        
+      if (!error?.digest?.includes('NEXT_REDIRECT')) {
+          toast.error('Gagal menambahkan ke wishlist');
       }
     } finally {
       setLoading(prev => ({ ...prev, [productId]: false }));
@@ -46,7 +48,7 @@ const FeaturedCard = ({ products }: { products: string }) => {
         >
           <Link href={`/products/${product.slug}`}>
             <div className="relative pt-[100%] overflow-hidden">
-              <img
+              <Image
                 src={product.thumbnail || 'https://placehold.co/300x300/png?text=No+Image'}
                 alt={product.name}
                 className="absolute top-0 left-0 w-full h-full object-cover"
