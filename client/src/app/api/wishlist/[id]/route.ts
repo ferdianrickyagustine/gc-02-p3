@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { deleteWishlist } from "@/db/models/wishlist";
 
+interface RouteContext {
+    params: {
+        id: string;
+    };
+}
+
 export async function DELETE(
-    request: NextRequest,
-    { params }: { params: { id: string } }
+    _request: NextRequest,
+    context: RouteContext
 ) {
     try {
         const cookieStore = await cookies();
@@ -17,7 +23,7 @@ export async function DELETE(
             );
         }
 
-        const result = await deleteWishlist(params.id);
+        const result = await deleteWishlist(context.params.id);
 
         if (!result.deletedCount) {
             return NextResponse.json(
