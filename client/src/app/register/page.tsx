@@ -29,13 +29,14 @@ const RegisterPage = () => {
       }
 
       return redirect("/login");
-    } catch (error: any) {
-      if (error?.digest?.includes('NEXT_REDIRECT')) {
-        throw error; 
+    } catch (error: unknown) {
+      const errorWithDigest = error as { digest?: string };
+      if (errorWithDigest?.digest?.includes('NEXT_REDIRECT')) {
+          throw error;
       }
       console.error("Registration error:", error);
       return redirect("/register?error=Something went wrong");
-    }
+  }
   };
 
   return (
