@@ -9,7 +9,7 @@ import { z } from "zod";
 
 import { cookies } from "next/headers";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const loginHandler = async (formData: FormData) => {
 	const loginInputSchema = z.object({

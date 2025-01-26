@@ -5,8 +5,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { addToWishlist } from "@/app/wishlist/action";
-import Error from "next/error";
-import Image from "next/image";
 
 const FeaturedCard = ({ products }: { products: string }) => {
   const parsedProducts = JSON.parse(products) as ProductModel[];

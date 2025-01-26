@@ -4,8 +4,9 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { deleteWishlist as deleteWishlistDb } from '@/db/models/wishlist'
+import { readPayloadJose } from "@/utils/jwt";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const getWishlists = async () => {
     try {
@@ -42,11 +43,14 @@ export const addToWishlist = async (productId: string) => {
         if (!token) {
             redirect("/login");
         }
+
+        const payload = await readPayloadJose<{ id: string }>(token.value)
         const response = await fetch(`${BASE_URL}/api/wishlist`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Cookie": cookieStore.toString()
+                "Cookie": cookieStore.toString(),
+                "x-user-id": payload.id
             },
             body: JSON.stringify({ productId })
         });

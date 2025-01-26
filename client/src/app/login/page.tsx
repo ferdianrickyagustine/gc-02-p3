@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import ErrorComponent from "@/components/ErrorComponent";
 import { loginHandler } from "./action";
-import Image from "next/image";
 const LoginPage = () => {
   
 

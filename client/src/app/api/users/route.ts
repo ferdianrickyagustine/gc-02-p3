@@ -23,7 +23,7 @@ const UserInputSchema = z.object({
     .string({
       message: "Password must be a string",
     })
-    .min(6, "Password must be more than 5 characters"),
+    .min(5, "Password must be more than 5 characters"),
 });
 
 export const POST = async (request: Request) => {

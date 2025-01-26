@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { deleteWishlist } from '@/app/wishlist/action';
 import { toast } from 'sonner';
-import Image from 'next/image';
 
 type WishlistCardProps = {
     _id: string;
