@@ -30,7 +30,7 @@ const WishlistCard = ({ _id, product }: WishlistCardProps) => {
 
     return (
         <div className="bg-white rounded-lg shadow-md p-4">
-            <Image 
+            <img 
                 src={product.thumbnail} 
                 alt={product.name}
                 className="w-full h-48 object-cover rounded-md mb-4"

@@ -48,7 +48,7 @@ const FeaturedCard = ({ products }: { products: string }) => {
         >
           <Link href={`/products/${product.slug}`}>
             <div className="relative pt-[100%] overflow-hidden">
-              <Image
+              <img
                 src={product.thumbnail || 'https://placehold.co/300x300/png?text=No+Image'}
                 alt={product.name}
                 className="absolute top-0 left-0 w-full h-full object-cover"

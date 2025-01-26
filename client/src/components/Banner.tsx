@@ -35,10 +35,11 @@ const Banner = () => {
           {bannerImages.map((banner, index) => (
             <SwiperSlide key={index}>
               <div className="aspect-[16/6]">
-                <Image
+                <img
                   src={banner}
                   alt={`Banner ${index + 1}`}
                   className="w-full h-full object-cover"
+                  
                 />
               </div>
             </SwiperSlide>

@@ -22,14 +22,18 @@ const RegisterPage = () => {
         },
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        return redirect(`/register?error=${errorData.error}`);
+        return redirect(`/register?error=${data.error}`);
       }
 
       return redirect("/login");
-    } catch (error) {
-      console.error("Error:", error);
+    } catch (error: any) {
+      if (error?.digest?.includes('NEXT_REDIRECT')) {
+        throw error; 
+      }
+      console.error("Registration error:", error);
       return redirect("/register?error=Something went wrong");
     }
   };
@@ -39,7 +43,7 @@ const RegisterPage = () => {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="flex justify-center pt-6">
-            <Image
+            <img
               src="https://img.lazcdn.com/g/tps/images/ims-web/TB1Hs8GaMFY.1VjSZFnXXcFHXXa.png"
               className="w-1/2 h-auto"
               alt="logo"

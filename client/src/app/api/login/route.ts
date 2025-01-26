@@ -1,54 +1,79 @@
 "use server";
-
 import { findUserByEmail } from "@/db/models/user";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { cookies } from "next/headers";
 import { signToken } from "@/utils/jwt";
 import { compare } from "@/utils/bcrypt";
-export const doLogin = async (formData: FormData) => {
-  const loginInputSchema = z.object({
-    email: z.string().email(),
-    password: z.string(),
-  });
+import { NextRequest, NextResponse } from "next/server";
 
-  const email = formData.get("email");
-  const password = formData.get("password");
+export async function POST(request: NextRequest) {
+  try {
+      const body = await request.json();
+      const { email, password } = body;
 
-  const parsedData = loginInputSchema.safeParse({
-    email,
-    password,
-  });
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  
-  if (!parsedData.success) {
-    const errPath = parsedData.error.issues[0].path[0];
-    const errMessage = parsedData.error.issues[0].message;
-    const errFinalMessage = `${errPath} - ${errMessage}`;
+      const loginInputSchema = z.object({
+          email: z.string().email(),
+          password: z.string(),
+      });
 
-    return redirect(`${BASE_URL}/login?error=${errFinalMessage}`);
+      const parsedData = loginInputSchema.safeParse({
+          email,
+          password,
+      });
+
+      if (!parsedData.success) {
+          const errPath = parsedData.error.issues[0].path[0];
+          const errMessage = parsedData.error.issues[0].message;
+          const errFinalMessage = `${errPath} - ${errMessage}`;
+
+          return NextResponse.json(
+              {
+                  statusCode: 400,
+                  error: errFinalMessage,
+              },
+              { status: 400 }
+          );
+      }
+
+      const user = await findUserByEmail(parsedData.data.email);
+
+      if (!user || !compare(parsedData.data.password, user.password)) {
+          return NextResponse.json(
+              {
+                  statusCode: 401,
+                  error: "Invalid credentials",
+              },
+              { status: 401 }
+          );
+      }
+
+      const payload = {
+          id: user._id,
+          email: user.email,
+      };
+
+      const token = signToken(payload);
+
+      const cookieStore = await cookies();
+      cookieStore.set("token", token, {
+          httpOnly: true,
+          secure: false,
+          expires: new Date(Date.now() + 1000 * 60 * 60), 
+          sameSite: "strict",
+      });
+
+      return NextResponse.json({
+          statusCode: 200,
+          message: "Login success",
+      });
+  } catch (error) {
+      console.error("Login error:", error);
+      return NextResponse.json(
+          {
+              statusCode: 500,
+              error: "Internal server error",
+          },
+          { status: 500 }
+      );
   }
-
-  const user = await findUserByEmail(parsedData.data.email);
-
-  if (!user || !compare(parsedData.data.password, user.password)) {
-    return redirect(`${BASE_URL}/login?error=Invalid%20credentials`);
-  }
-
-  const payload = {
-    id: user._id,
-    email: user.email,
-  };
-
-  const token = signToken(payload);
-
-  const cookieStorage = await cookies();
-  cookieStorage.set("token", token, {
-    httpOnly: true,
-    secure: false,
-    expires: new Date(Date.now() + 1000 * 60 * 60), 
-    sameSite: "strict",
-  });
-
-  return redirect(`${BASE_URL}`);
-};
+}
