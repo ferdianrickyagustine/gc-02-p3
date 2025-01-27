@@ -3,12 +3,11 @@ import Image from 'next/image';
 
 type PageParams = {
     params: Promise<{ slug: string }>;
-    searchParams?: { [key: string]: string | string[] | undefined }
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const ProductPage = async ({ params }: PageParams) => {
-  const resolvedParams = await params;
-  const slug = resolvedParams.slug;
+const ProductPage = async ({ params }: { params: { slug: string } }) => {
+  const slug = params.slug;
 
   const formatRupiah = (price: number) => {
     return price.toLocaleString("id-ID");
