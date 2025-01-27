@@ -4,14 +4,14 @@ import Image from 'next/image';
 export const dynamic = 'force-dynamic'
 
 interface PageParams {
-    params: {
+    params: Promise<{
         slug: string;
-        [key: string]: string | string[];
-    }
+    }>;
 }
 
 const ProductPage = async ({ params }: PageParams) => {
-  const slug = params.slug;
+    const resolvedParams = await params;
+    const slug = resolvedParams.slug;
 
   const formatRupiah = (price: number) => {
     return price.toLocaleString("id-ID");
