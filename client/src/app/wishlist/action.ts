@@ -41,7 +41,7 @@ export const addWishlist = async (productId: string) => {
         // console.log(token, "<<<<<<<<<<<<<<<<<<< ini token");
         
         if (!token) {
-            redirect("/login");
+            return redirect("/login");
         }
 
         const payload = await readPayloadJose<{ id: string }>(token.value)
@@ -60,7 +60,7 @@ export const addWishlist = async (productId: string) => {
         }
 
         revalidatePath("/wishlist");
-        redirect("/wishlist");
+        return redirect("/wishlist");
     } catch (error) {
         console.error("Error:", error);
         throw error;

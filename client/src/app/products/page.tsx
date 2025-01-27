@@ -4,7 +4,7 @@ import FeaturedCard from "@/components/FeaturedCard";
 import { ProductModel } from "@/db/models/product";
 import {  useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { fetchData } from "./action";
+import { fetchProducts, ProductResponse } from "./action";
 import { useSearchParams } from "next/navigation";
 
 const ProductPage =  () => {
@@ -23,7 +23,7 @@ const ProductPage =  () => {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const response = await fetchData(searchQuery, page, 12);
+                const response: ProductResponse = await fetchProducts(searchQuery, page, 12);
                 if (response.data.length === 0) {
                     setHasMore(false);
                 }
@@ -44,13 +44,6 @@ const ProductPage =  () => {
     const moreFetch = () => {
         setPage((prev) => prev + 1);
     };
-
-    // const transformedProducts = products.map(product => ({
-    //     ...product,
-    //     _id: product._id.toString(),
-    //     createdAt: new Date(product.createdAt).toISOString(),
-    //     updatedAt: new Date(product.updatedAt).toISOString()
-    // }));
   
     return (
         <div className="bg-gray-50 min-h-screen">
