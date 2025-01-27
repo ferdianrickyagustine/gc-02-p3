@@ -1,15 +1,14 @@
 import { getProductBySlug } from "@/db/models/product";
 import Image from 'next/image';
 
-type PageProps = {
-    params: {
-        slug: string
-    },
+type PageParams = {
+    params: Promise<{ slug: string }>;
     searchParams?: { [key: string]: string | string[] | undefined }
 }
 
-const ProductPage = async ({ params }: PageProps) => {
-  const slug = params.slug;
+const ProductPage = async ({ params }: PageParams) => {
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
 
   const formatRupiah = (price: number) => {
     return price.toLocaleString("id-ID");
