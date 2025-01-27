@@ -3,11 +3,14 @@ import Image from 'next/image';
 
 export const dynamic = 'force-dynamic'
 
-const ProductPage = async ({ 
-    params 
-}: { 
-    params: { slug: string } & { [key: string]: any } 
-}) => {
+interface PageParams {
+    params: {
+        slug: string;
+        [key: string]: string | string[];
+    }
+}
+
+const ProductPage = async ({ params }: PageParams) => {
   const slug = params.slug;
 
   const formatRupiah = (price: number) => {
