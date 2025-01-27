@@ -1,12 +1,13 @@
 import { getProductBySlug } from "@/db/models/product";
 import Image from 'next/image';
 
-type PageParams = {
-    params: Promise<{ slug: string }>;
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+export const dynamic = 'force-dynamic'
+
+type Props = {
+    params: { slug: string }
 }
 
-const ProductPage = async ({ params }: { params: { slug: string } }) => {
+const ProductPage = async ({ params }: Props) => {
   const slug = params.slug;
 
   const formatRupiah = (price: number) => {
