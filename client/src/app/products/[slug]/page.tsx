@@ -3,11 +3,11 @@ import Image from 'next/image';
 
 export const dynamic = 'force-dynamic'
 
-type Props = {
-    params: { slug: string }
-}
-
-const ProductPage = async ({ params }: Props) => {
+const ProductPage = async ({ 
+    params 
+}: { 
+    params: { slug: string } & { [key: string]: any } 
+}) => {
   const slug = params.slug;
 
   const formatRupiah = (price: number) => {
